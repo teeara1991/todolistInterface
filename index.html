@@ -28,27 +28,26 @@
         <div class="col-md-3"></div>
         <div class="col-md-6" id="todo">
           <h2>Мои списки дел <i id="pencil" class="fas fa-pencil-alt"></i></h2>
-          <input
-            type="text"
-            class="input-medium search-query"
-            placeholder="Добавить список"
-          />
-          <ul class="todos">
-            <li>
-              <span class="todo-text">Кодить</span
-              ><span class="todo-trash"><i class="fas fa-trash-alt"></i></span>
-            </li>
-            <li>
-              <span class="todo-text">Спать</span
-              ><span class="todo-trash"><i class="fas fa-trash-alt"></i></span>
-            </li>
-          </ul>
+          <form name="todo">
+            <input
+              type="text"
+              name="todo-name"
+              class="input-medium search-query"
+              placeholder="Добавить список"
+            />
+            <button type="submit" class="btn btn-primary">add</button>
+          </form>
+
+          <ul class="todos"></ul>
           <div id="buttons">
             <button type="button" class="btn btn-primary" id="save">
               Сохранить
             </button>
             <button type="button" class="btn btn-primary" id="clear">
               Очистить
+            </button>
+            <button type="button" class="btn btn-primary" id="delete">
+              Удалить выбранное
             </button>
           </div>
         </div>

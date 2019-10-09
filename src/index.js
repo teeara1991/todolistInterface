@@ -1,55 +1,104 @@
 //selecting dom elements for manipulation
-const input = document.querySelector("input[type = 'text']");
-const ul = document.querySelector("ul");
-const spans = document.getElementsByTagName("span");
-const saveBtn = document.querySelector("#save");
-const clearBtn = document.querySelector("#clear");
 
-const deleteTodo = () => {
-  for (let span of spans) {
-    span.addEventListener("click", function() {
-      span.parentElement.remove();
-    });
+let todoStore = [{ name: "asdasd", checked: true }];
+
+const todoTemplate = (id, name, checked = false) => `
+<li class="todo-item" data-id="${id}">
+  <input type="checkbox" ${checked && "checked"}/>
+  <input type="text" value="${name}" name="todo-edit" style="display: none;"/>
+  <span class="todo-text">${name}</span>
+  <span class="todo-trash"><i class="fas fa-trash-alt"></i></span>
+  <span class="todo-edit"><i class="fas fa-edit"></i></span>
+</li>
+`;
+
+const form = document.querySelector("form[name=todo]");
+const buttons = document.querySelector("#buttons");
+const todosListRoot = document.querySelector(".todos");
+
+const deleteAction = index => event => {
+  todoStore.splice(index, 1);
+  renderTodos();
+};
+const visibleAction = (index, elem) => event => {
+  elem.querySelector("input[name=todo-edit]").style.display = "block";
+  elem.querySelector(".todo-text").style.display = "none";
+};
+const editAction = (index, elem) => event => {
+  if (event.key === "Enter") {
+    todoStore[index].name = elem.querySelector("input[name=todo-edit]").value;
+    renderTodos();
   }
 };
-const loadTodo = () => {
-  if (localStorage.getItem("todoList")) {
-    ul.innerHTML = localStorage.getItem("todoList");
-    deleteTodo();
+const loadAction = () => {
+  const data = JSON.parse(localStorage.getItem("storage"));
+  todoStore = (data && [...data]) || [];
+
+  renderTodos();
+};
+const checkAction = index => event => {
+  todoStore[index].checked = !todoStore[index].checked;
+  renderTodos();
+};
+
+const attachListeniers = () => {
+  const todos = todosListRoot.querySelectorAll(".todo-item");
+
+  for (let todo of todos) {
+    const id = todo.getAttribute("data-id");
+    todo
+      .querySelector(".todo-trash")
+      .addEventListener("click", deleteAction(id));
+    todo
+      .querySelector(".todo-edit")
+      .addEventListener("click", visibleAction(id, todo));
+    todo
+      .querySelector("input[name=todo-edit]")
+      .addEventListener("keydown", editAction(id, todo));
+    todo
+      .querySelector("input[type=checkbox]")
+      .addEventListener("click", checkAction(id));
   }
 };
-input.addEventListener("keypress", function(keyPressed) {
-  if (keyPressed.which === 13) {
-    const li = document.createElement("li");
-    const spanText = document.createElement("span");
-    const spanTrash = document.createElement("span");
-    const icon = document.createElement("i");
-    const newTodo = this.value;
-    this.value = " ";
-    icon.classList.add("fas", "fa-trash-alt");
-    spanText.classList.add("todo-text");
-    spanTrash.classList.add("todo-trash");
-    spanTrash.append(icon);
-    ul.appendChild(li).append(spanText, newTodo);
-    li.append(spanTrash);
-    deleteTodo();
-  }
+
+const renderTodos = () => {
+  const todosHtml = todoStore
+    .map((todo, index) => todoTemplate(index, todo.name, todo.checked))
+    .join("")
+    .trim();
+
+  todosListRoot.innerHTML = todosHtml;
+  attachListeniers();
+};
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  const todoName = form.querySelector("input[name=todo-name]");
+
+  todoStore = [...todoStore, { name: todoName.value, checked: false }];
+
+  renderTodos();
+  todoName.value = "";
 });
-ul.addEventListener(
-  "click",
-  function(ev) {
-    if (ev.target.tagName === "LI") {
-      ev.target.classList.toggle("checked");
+
+buttons.querySelector("#delete").addEventListener("click", event => {
+  const newTodow = todoStore.reduce((acc, item) => {
+    if (item.checked) {
+      return acc;
     }
-  },
-  false
-);
-saveBtn.addEventListener("click", function() {
-  localStorage.setItem("todoList", ul.innerHTML);
+
+    return [...acc, item];
+  }, []);
+
+  todoStore = [...newTodow];
+  renderTodos();
 });
-clearBtn.addEventListener("click", function() {
-  ul.innerHTML = "";
-  localStorage.removeItem("todoList", ul.innerHTML);
+buttons.querySelector("#clear").addEventListener("click", event => {
+  todoStore = [];
+  renderTodos();
 });
-deleteTodo();
-loadTodo();
+buttons.querySelector("#save").addEventListener("click", event => {
+  localStorage.setItem("storage", JSON.stringify(todoStore));
+});
+
+loadAction();
