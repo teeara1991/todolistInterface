@@ -1,9 +1,9 @@
 //selecting dom elements for manipulation
 
-let todoStore = [{ name: "asdasd", checked: true }];
+let todoStore = [{ name: "asdasd", checked: true, completed: false }];
 
-const todoTemplate = (id, name, checked = false) => `
-<li class="todo-item" data-id="${id}">
+const todoTemplate = (id, name, checked = false, completed = false) => `
+<li class="todo-item ${completed ? "completed" : ""}" data-id="${id}">
   <input type="checkbox" ${checked && "checked"}/>
   <input type="text" value="${name}" name="todo-edit" style="display: none;"/>
   <span class="todo-text">${name}</span>
@@ -63,7 +63,9 @@ const attachListeniers = () => {
 
 const renderTodos = () => {
   const todosHtml = todoStore
-    .map((todo, index) => todoTemplate(index, todo.name, todo.checked))
+    .map((todo, index) =>
+      todoTemplate(index, todo.name, todo.checked, todo.completed)
+    )
     .join("")
     .trim();
 
@@ -91,6 +93,23 @@ buttons.querySelector("#delete").addEventListener("click", event => {
   }, []);
 
   todoStore = [...newTodow];
+  renderTodos();
+});
+buttons.querySelector("#complete").addEventListener("click", event => {
+  todoStore.forEach((el, index) => {
+    if (todoStore[index].checked) {
+      todoStore[index].completed = true;
+    }
+  });
+  renderTodos();
+});
+buttons.querySelector("#uncomplete").addEventListener("click", event => {
+  todoStore.forEach((el, index) => {
+    if (todoStore[index].checked) {
+      todoStore[index].completed = false;
+      todoStore[index].checked = false;
+    }
+  });
   renderTodos();
 });
 buttons.querySelector("#clear").addEventListener("click", event => {
