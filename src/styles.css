@@ -23,3 +23,9 @@ body {
   border: 3px solid rgb(161, 167, 226); /* Параметры рамки */
   border-radius: 5px;
 }
+.todos-custom {
+  margin: 5px;
+}
+.todo-item {
+  margin: 5px;
+}
