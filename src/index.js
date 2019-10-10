@@ -1,4 +1,26 @@
-let todoStore = [{ name: "asdasd", checked: true, completed: false }];
+import {
+  deleteAction,
+  visibleAction,
+  editAction,
+  loadAction,
+  checkAction,
+  completeAction,
+  unCompleteAction,
+  deleteCheckedteAction,
+  submitAction,
+  clearAction,
+  saveAction,
+  todoStore
+} from "./actions";
+
+const form = document.querySelector("form[name=todo]");
+const buttons = document.querySelector("#buttons");
+const todosListRoot = document.querySelector(".todos");
+const buttonDelete = buttons.querySelector("#delete");
+const buttonComplete = buttons.querySelector("#complete");
+const buttonUnComplete = buttons.querySelector("#uncomplete");
+const buttonClear = buttons.querySelector("#clear");
+const buttonSave = buttons.querySelector("#save");
 
 const todoTemplate = (id, name, checked = false, completed = false) => `
 <li class="todo-item ${completed ? "completed" : ""}" data-id="${id}">
@@ -9,36 +31,6 @@ const todoTemplate = (id, name, checked = false, completed = false) => `
   <span class="todo-edit"><i class="fas fa-edit"></i></span>
 </li>
 `;
-
-const form = document.querySelector("form[name=todo]");
-const buttons = document.querySelector("#buttons");
-const todosListRoot = document.querySelector(".todos");
-
-const deleteAction = index => event => {
-  todoStore.splice(index, 1);
-  renderTodos();
-};
-const visibleAction = (index, elem) => event => {
-  elem.querySelector("input[name=todo-edit]").style.display = "block";
-  elem.querySelector(".todo-text").style.display = "none";
-};
-const editAction = (index, elem) => event => {
-  if (event.key === "Enter") {
-    todoStore[index].name = elem.querySelector("input[name=todo-edit]").value;
-    renderTodos();
-  }
-};
-const loadAction = () => {
-  const data = JSON.parse(localStorage.getItem("storage"));
-  todoStore = (data && [...data]) || [];
-
-  renderTodos();
-};
-const checkAction = index => event => {
-  todoStore[index].checked = !todoStore[index].checked;
-  renderTodos();
-};
-
 const attachListeniers = () => {
   const todos = todosListRoot.querySelectorAll(".todo-item");
 
@@ -59,7 +51,7 @@ const attachListeniers = () => {
   }
 };
 
-const renderTodos = () => {
+export const renderTodos = () => {
   const todosHtml = todoStore
     .map((todo, index) =>
       todoTemplate(index, todo.name, todo.checked, todo.completed)
@@ -71,52 +63,11 @@ const renderTodos = () => {
   attachListeniers();
 };
 
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  const todoName = form.querySelector("input[name=todo-name]");
-
-  todoStore = [...todoStore, { name: todoName.value, checked: false }];
-
-  renderTodos();
-  todoName.value = "";
-});
-
-buttons.querySelector("#delete").addEventListener("click", event => {
-  const newTodow = todoStore.reduce((acc, item) => {
-    if (item.checked) {
-      return acc;
-    }
-
-    return [...acc, item];
-  }, []);
-
-  todoStore = [...newTodow];
-  renderTodos();
-});
-buttons.querySelector("#complete").addEventListener("click", event => {
-  todoStore.forEach((el, index) => {
-    if (todoStore[index].checked) {
-      todoStore[index].completed = true;
-      todoStore[index].checked = false;
-    }
-  });
-  renderTodos();
-});
-buttons.querySelector("#uncomplete").addEventListener("click", event => {
-  todoStore.forEach((el, index) => {
-    if (todoStore[index].checked) {
-      todoStore[index].completed = false;
-      todoStore[index].checked = false;
-    }
-  });
-  renderTodos();
-});
-buttons.querySelector("#clear").addEventListener("click", event => {
-  todoStore = [];
-  renderTodos();
-});
-buttons.querySelector("#save").addEventListener("click", event => {
-  localStorage.setItem("storage", JSON.stringify(todoStore));
-});
+form.addEventListener("submit", submitAction);
+buttonDelete.addEventListener("click", deleteCheckedteAction);
+buttonComplete.addEventListener("click", completeAction);
+buttonUnComplete.addEventListener("click", unCompleteAction);
+buttonClear.addEventListener("click", clearAction);
+buttonSave.addEventListener("click", saveAction);
 
 loadAction();
