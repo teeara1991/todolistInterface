@@ -18,3 +18,8 @@ body {
 .control {
   margin: 5px auto;
 }
+.custom {
+  height: 40px;
+  border: 3px solid rgb(161, 167, 226); /* Параметры рамки */
+  border-radius: 5px;
+}
