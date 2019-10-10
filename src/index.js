@@ -1,5 +1,3 @@
-//selecting dom elements for manipulation
-
 let todoStore = [{ name: "asdasd", checked: true, completed: false }];
 
 const todoTemplate = (id, name, checked = false, completed = false) => `
@@ -99,6 +97,7 @@ buttons.querySelector("#complete").addEventListener("click", event => {
   todoStore.forEach((el, index) => {
     if (todoStore[index].checked) {
       todoStore[index].completed = true;
+      todoStore[index].checked = false;
     }
   });
   renderTodos();
