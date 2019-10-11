@@ -24,6 +24,7 @@ const submitAction = event => {
   todoStore = [...todoStore, { name: todoName.value, checked: false }];
   renderTodos();
   todoName.value = "";
+  todoName.focus();
 };
 const saveAction = () => {
   localStorage.setItem("storage", JSON.stringify(todoStore));
