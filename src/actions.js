@@ -6,53 +6,14 @@ const deleteAction = index => event => {
   todoStore.splice(index, 1);
   renderTodos();
 };
-const visibleAction = (index, elem) => event => {
-  elem.querySelector("input[name=todo-edit]").style.display = "block";
-  elem.querySelector(".todo-text").style.display = "none";
-};
-const editAction = (index, elem) => event => {
-  if (event.key === "Enter") {
-    todoStore[index].name = elem.querySelector("input[name=todo-edit]").value;
-    renderTodos();
-  }
-};
 const loadAction = () => {
   const data = JSON.parse(localStorage.getItem("storage"));
   todoStore = (data && [...data]) || [];
   renderTodos();
 };
-const checkAction = index => event => {
-  todoStore[index].checked = !todoStore[index].checked;
-  renderTodos();
-};
-const completeAction = event => {
-  todoStore.forEach((el, index) => {
-    if (todoStore[index].checked) {
-      todoStore[index].completed = true;
-      todoStore[index].checked = false;
-    }
-  });
-  renderTodos();
-};
-const unCompleteAction = event => {
-  todoStore.forEach((el, index) => {
-    if (todoStore[index].checked) {
-      todoStore[index].completed = false;
-      todoStore[index].checked = false;
-    }
-  });
-  renderTodos();
-};
-const deleteCheckedteAction = event => {
-  const newTodow = todoStore.reduce((acc, item) => {
-    if (item.checked) {
-      return acc;
-    }
-
-    return [...acc, item];
-  }, []);
-
-  todoStore = [...newTodow];
+const completeAction = index => event => {
+  todoStore[index].completed = !todoStore[index].completed;
+  todoStore[index].checked = false;
   renderTodos();
 };
 const submitAction = event => {
@@ -64,23 +25,7 @@ const submitAction = event => {
   renderTodos();
   todoName.value = "";
 };
-const clearAction = event => {
-  todoStore = [];
-  renderTodos();
-};
-const saveAction = event => {
+const saveAction = () => {
   localStorage.setItem("storage", JSON.stringify(todoStore));
 };
-export {
-  deleteAction,
-  visibleAction,
-  editAction,
-  loadAction,
-  checkAction,
-  completeAction,
-  unCompleteAction,
-  deleteCheckedteAction,
-  submitAction,
-  clearAction,
-  saveAction
-};
+export { deleteAction, loadAction, completeAction, submitAction, saveAction };

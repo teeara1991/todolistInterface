@@ -22,48 +22,20 @@
     />
     <link rel="stylesheet" type="text/css" href="src/styles.css" />
   </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6" id="todo">
-          <h2>Мои списки дел <i id="pencil" class="fas fa-pencil-alt"></i></h2>
-          <form name="todo">
-            <input
-              type="text"
-              name="todo-name"
-              class="custom"
-              placeholder="Добавить список"
-            />
-            <button type="submit" class="btn btn-primary">+</button>
-          </form>
 
-          <ul class="todos todos-custom"></ul>
-          <div id="buttons">
-            <button type="button" class="btn btn-primary control" id="save">
-              Сохранить
-            </button>
-            <button type="button" class="btn btn-primary control" id="clear">
-              Очистить
-            </button>
-            <button type="button" class="btn btn-primary control" id="delete">
-              Удалить выбранное
-            </button>
-            <button type="button" class="btn btn-primary control" id="complete">
-              Пометить как выполненное
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary control"
-              id="uncomplete"
-            >
-              Пометить как невыполненное
-            </button>
-          </div>
-        </div>
-        <div class="col-md-3"></div>
-      </div>
-    </div>
+  <body>
+    <h2>Мои списки дел <i id="pencil" class="fas fa-pencil-alt"></i></h2>
+    <form name="todo">
+      <input
+        type="text"
+        name="todo-name"
+        class="custom"
+        placeholder="Добавить задачу"
+      />
+      <button type="submit" class="btn btn-primary">+</button>
+    </form>
+    <ul class="todos todos-custom"></ul>
+
     <script
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
       integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
