@@ -1,19 +1,3 @@
-::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  padding: 10px;
-}
-::-moz-placeholder {
-  /* Firefox 19+ */
-  padding: 10px;
-}
-:-ms-input-placeholder {
-  /* IE 10+ */
-  padding: 10px;
-}
-:-moz-placeholder {
-  /* Firefox 18- */
-  padding: 10px;
-}
 body {
   font-family: sans-serif;
 }
