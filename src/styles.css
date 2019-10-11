@@ -25,7 +25,6 @@ body {
 }
 .custom {
   height: 40px;
-  border: 2px solid rgb(161, 167, 226); /* Параметры рамки */
   border-radius: 5px;
 }
 .todos-custom {
@@ -33,4 +32,7 @@ body {
 }
 .todo-item {
   margin: 3px -70px;
+}
+input {
+  max-width: 360px;
 }
